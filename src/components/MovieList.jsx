@@ -120,14 +120,6 @@ const MovieList = () => {
     setShowModal(true);
   };
 
-  const handlePurchase = () => {
-    // Your logic for processing the purchase
-    // For now, just closing the modal
-    setShowModal(false);
-    setShowModalNotes(true);
-    showAldoAlert('Ticket purchased successfully!', 'warning');
-  };
-
   const generateNotes = (text) => {
     let index = 0;
     setLoading(true);
@@ -168,13 +160,20 @@ const MovieList = () => {
     setLoadingInvite(true);
     setTimeout(() => {
       setLoadingInvite(false);
-      showAldoAlert('Payment successful!', 'warning');
-      setShowModalNotes(false);
-
+      showAldoAlert('Invite successful!', 'warning');
       // Open the link in a new tab
       window.open('https://t.me/aldoooosg?text=Heyy%2C%20I%20already%20booked%20a%20movie%20ticket%20for%20both%20of%20us.%20We%27re%20going%20to%20watch%20it%20together%21', '_blank');
+      setShowModal(false); // Close the modal
+      setShowModalNotes(false); // Close the modal
     }, 2000);
   }
+
+  const handleClose = () => {
+    setShowModal(false);
+    setShowModalNotes(false);
+  }
+
+  
 
 
 
@@ -254,14 +253,14 @@ const MovieList = () => {
                 <input type="text" id="telegramUsername" value={telegramUsername} onChange={(e) => setTelegramUsername(e.target.value)} className="block w-full border border-black rounded-md p-2" />
               </div>
               <div className="flex justify-end">
-                <a
+                <button
                   className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out mr-2"
                   onClick={inviteFunction}
                 >
                   {loadingInvite ? <ScaleLoader color='#ffffff' /> : "Send Invitation"}
-                </a>
+                </button>
 
-                <button onClick={() => setShowModalNotes(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-md transition duration-300 ease-in-out">Cancel</button>
+                <button onClick={handleClose} className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-md transition duration-300 ease-in-out">Exit</button>
               </div>
 
 
