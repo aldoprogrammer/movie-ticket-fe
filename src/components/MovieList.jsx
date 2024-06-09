@@ -169,7 +169,7 @@ const MovieList = () => {
     setTimeout(() => {
       setLoadingInvite(false);
       showAldoAlert('Payment successful!', 'warning');
-      setShowModalNotes(true);
+      setShowModalNotes(false);
 
       // Open the link in a new tab
       window.open('https://t.me/aldoooosg?text=Heyy%2C%20I%20already%20booked%20a%20movie%20ticket%20for%20both%20of%20us.%20We%27re%20going%20to%20watch%20it%20together%21', '_blank');
