@@ -1,11 +1,11 @@
 import './App.css'
-import ExampleComponent from './components/ExampleComponent'
+import MovieList from './components/MovieList'
 
 function App() {
   
 
   return (
-   <ExampleComponent />
+   <MovieList />
   )
 }
 
