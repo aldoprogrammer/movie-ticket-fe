@@ -2,13 +2,15 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_BASE_URL = 'http://localhost:3000'; // Adjust this to match your back-end server URL
+
 const ExampleComponent = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get('/api/movies');
+        const response = await axios.get(`${API_BASE_URL}/movies`); // Use the base URL here
         setMovies(response.data.movies);
       } catch (error) {
         console.error('Error fetching movies:', error);
