@@ -1,9 +1,17 @@
+import { useAldoAlert } from 'aldo-alert';
 import { useState } from 'react';
 import { HashLoader, PacmanLoader, ScaleLoader } from 'react-spinners';
 
 const MovieList = () => {
+  const { showAldoAlert } = useAldoAlert();
+
   const [showModal, setShowModal] = useState(false);
+  const [showModalNotes, setShowModalNotes] = useState(false);
+  const [loadingPay, setLoadingPay] = useState(false);
+  const [loadingInvite, setLoadingInvite] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');
+  const [price, setPrice] = useState('5 ETH / $100 / 0.0001 BTC / Crypto Support Payment');
+  const [seat, setSeat] = useState('');
   const [notes, setNotes] = useState('');
   const [telegramUsername, setTelegramUsername] = useState('');
   const [loading, setLoading] = useState(false);
@@ -116,7 +124,8 @@ const MovieList = () => {
     // Your logic for processing the purchase
     // For now, just closing the modal
     setShowModal(false);
-    alert('Payment successful!');
+    setShowModalNotes(true);
+    showAldoAlert('Ticket purchased successfully!', 'warning');
   };
 
   const generateNotes = (text) => {
@@ -131,8 +140,43 @@ const MovieList = () => {
       }
     }, 50); // Mengatur kecepatan pengetikan
   };
-  
-  
+
+
+  const generateWalletAI = (text) => {
+    let index = 0;
+    setLoading(true);
+    const intervalId = setInterval(() => {
+      setWalletAddress((prevNotes) => prevNotes + text.charAt(index));
+      index++;
+      if (index === text.length) {
+        clearInterval(intervalId);
+        setLoading(false);
+      }
+    }, 50); // Mengatur kecepatan pengetikan
+  };
+
+  const payFunction = () => {
+    setLoadingPay(true);
+    setTimeout(() => {
+      setLoadingPay(false);
+      showAldoAlert('Payment successful!', 'warning');
+      setShowModalNotes(true);
+    }, 2000);
+  }
+
+  const inviteFunction = () => {
+    setLoadingInvite(true);
+    setTimeout(() => {
+      setLoadingInvite(false);
+      showAldoAlert('Payment successful!', 'warning');
+      setShowModalNotes(true);
+
+      // Open the link in a new tab
+      window.open('https://t.me/aldoooosg?text=Heyy%2C%20I%20already%20booked%20a%20movie%20ticket%20for%20both%20of%20us.%20We%27re%20going%20to%20watch%20it%20together%21', '_blank');
+    }, 2000);
+  }
+
+
 
   return (
     <div className="max-w-3xl mx-auto p-4">
@@ -144,7 +188,7 @@ const MovieList = () => {
             <img src={movie.image} alt={movie.title} className="w-full h-auto mb-2" />
             <p className="text-lg font-semibold">{movie.title}</p>
             <p className="text-gray-500">{truncateDescription(movie.desc)}</p>
-            <p className={`w-fit text-gray-500 p-2 rounded-full px-5 flex justify-center items-center ${movie.trending === 'yes' ? 'text-black bg-blue-200' : 'bg-red-300 text-white'}`}>Trending: {movie.trending}</p>
+            <p className={`w-fit text-white p-2 rounded-full px-5 flex justify-center items-center ${movie.trending === 'yes' ? 'text-black bg-blue-400' : 'bg-red-400 text-white'}`}>Trending: {movie.trending}</p>
             <p className="text-gray-500"> <span className='font-bold'>Rating:</span> {movie.rating} ⭐</p>
             <p className="text-gray-500"><span className='font-bold'>Showtimes:</span> {movie.showtimes.join(' - ')}</p>
             <button onClick={handleBuyClick} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition-transform hover:transform hover:-translate-y-1 duration-300">Buy</button>
@@ -152,33 +196,82 @@ const MovieList = () => {
         ))}
       </ul>
       {showModal && (
-  <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
-    <div className="bg-white p-8 rounded-md shadow-lg w-10/12 h-4/5">
-      <h2 className="text-2xl font-semibold mb-4">Purchase</h2>
-      <div className="mb-4 text-left">
-        <label htmlFor="walletAddress" className="block text-gray-700 font-semibold mb-1">Wallet Address:</label>
-        <input type="text" id="walletAddress" value={walletAddress} onChange={(e) => setWalletAddress(e.target.value)} className="block w-full border border-black rounded-md p-2" />
-      </div>
-      <div className="mb-4 text-left">
-              <label htmlFor="notes" className="block text-gray-700 font-semibold mb-1">Notes:</label>
-              <textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} className="block w-full border border-black rounded-md p-2" rows="4"></textarea>
-              <button onClick={() => generateNotes(" Heyy, I already booked a movie ticket for both of us. We're going to watch it together!")} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md mt-2
+        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-8 rounded-md shadow-lg w-10/12 h-4/5 overflow-y-auto">
+            <div >
+              <h2 className="text-2xl font-semibold mb-4">Purchase</h2>
+              <div className="mb-4 text-left">
+
+                <label htmlFor="walletAddress" className="block text-gray-700 font-semibold mb-1">Wallet Address:</label>
+                <input type="text" id="walletAddress" value={walletAddress} onChange={(e) => setWalletAddress(e.target.value)} className="block w-full border border-black rounded-md p-2" />
+                <button onClick={() => generateWalletAI("0xc0ffee254729296a45a3885639AC7E10F9d54979")} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md mt-2
+              w-[180px] h-[50px] flex justify-center items-center mb-3">
+                  {loading ? <ScaleLoader color='#ffffff' /> : "Generate AI"}
+                </button>
+              </div>
+              <div className="mb-4 text-left">
+                <label htmlFor="walletAddress" className="block text-gray-700 font-semibold mb-1">Price: $7 / ETH 0.02 / BTC 0.0005</label>
+              </div>
+
+              <div className="mb-4 text-left">
+                <label htmlFor="telegramUsername" className="block text-gray-700 font-semibold mb-1">Seat:</label>
+                <input type="number" id="telegramUsername" value={seat} onChange={(e) => setSeat(e.target.value)} className="block w-full border border-black rounded-md p-2" />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  onClick={payFunction}
+                  className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out mr-2"
+                >
+                  {loadingPay ? <ScaleLoader color='#ffffff' /> : "Pay Ticket"}
+                </button>
+
+                <button onClick={() => setShowModal(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-md transition duration-300 ease-in-out">Cancel</button>
+              </div>
+
+
+
+
+            </div>
+          </div>
+        </div>
+      )}
+      {showModalNotes && (
+        <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 z-50">
+          <div className={`bg-white p-8 rounded-md shadow-lg w-10/12 h-4/5 overflow-y-auto transition-transform duration-300 ${showModal && 'scale-100'}`}>
+            <div >
+              <h2 className="text-2xl font-semibold mb-4">Ask your partner to come!</h2>
+              <div className="mb-4 text-left">
+                <label htmlFor="notes" className="block text-gray-700 font-semibold mb-1">Notes:</label>
+                <textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} className="block w-full border border-black rounded-md p-2" rows="4"></textarea>
+                <button onClick={() => generateNotes(" Heyy, I already booked a movie ticket for both of us. We're going to watch it together!")} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md mt-2
               w-[180px] h-[50px] flex justify-center items-center">
-                {loading ? <ScaleLoader color='#ffffff' /> : "Generate Notes"}
+                  {loading ? <ScaleLoader color='#ffffff' /> : "Generate Notes"}
 
                 </button>
+              </div>
+              <div className="mb-4 text-left">
+                <label htmlFor="telegramUsername" className="block text-gray-700 font-semibold mb-1">Telegram Username:</label>
+                <input type="text" id="telegramUsername" value={telegramUsername} onChange={(e) => setTelegramUsername(e.target.value)} className="block w-full border border-black rounded-md p-2" />
+              </div>
+              <div className="flex justify-end">
+                <a
+                  className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out mr-2"
+                  onClick={inviteFunction}
+                >
+                  {loadingInvite ? <ScaleLoader color='#ffffff' /> : "Send Invitation"}
+                </a>
+
+                <button onClick={() => setShowModalNotes(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-md transition duration-300 ease-in-out">Cancel</button>
+              </div>
+
+
+
+
             </div>
-      <div className="mb-4 text-left">
-        <label htmlFor="telegramUsername" className="block text-gray-700 font-semibold mb-1">Telegram Username:</label>
-        <input type="text" id="telegramUsername" value={telegramUsername} onChange={(e) => setTelegramUsername(e.target.value)} className="block w-full border border-black rounded-md p-2" />
-      </div>
-      <div className="flex justify-end">
-        <button onClick={handlePurchase} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out mr-2">Confirm</button>
-        <button onClick={() => setShowModal(false)} className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-md transition duration-300 ease-in-out">Cancel</button>
-      </div>
-    </div>
-  </div>
-)}
+          </div>
+        </div>
+      )}
+
 
     </div>
   );
