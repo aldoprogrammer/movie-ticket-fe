@@ -1,10 +1,11 @@
 import { useAldoAlert } from 'aldo-alert';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { HashLoader, PacmanLoader, ScaleLoader } from 'react-spinners';
 
 const MovieList = () => {
   const { showAldoAlert } = useAldoAlert();
-
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [showModalNotes, setShowModalNotes] = useState(false);
   const [loadingPay, setLoadingPay] = useState(false);
@@ -173,7 +174,7 @@ const MovieList = () => {
     setShowModalNotes(false);
   }
 
-  
+
 
 
 
@@ -200,23 +201,24 @@ const MovieList = () => {
             <div >
               <h2 className="text-2xl font-semibold mb-4">Purchase</h2>
               <div className="mb-4 text-left">
-
-                <label htmlFor="walletAddress" className="block text-gray-700 font-semibold mb-1">Wallet Address:</label>
+                <label htmlFor="walletAddress" className="block text-gray-700 font-semibold mb-1">TON Wallet Address:</label>
                 <input type="text" id="walletAddress" value={walletAddress} onChange={(e) => setWalletAddress(e.target.value)} className="block w-full border border-black rounded-md p-2" />
-                <button onClick={() => generateWalletAI("0xc0ffee254729296a45a3885639AC7E10F9d54979")} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md mt-2
-              w-[180px] h-[50px] flex justify-center items-center mb-3">
+                <button onClick={() => generateWalletAI(" 0:16cc429c767ca4bd77d4368baa752eb6b6fae9df66c2c6e292e9e42b4ba21281")} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md mt-2 w-[180px] h-[50px] flex justify-center items-center mb-3">
                   {loading ? <ScaleLoader color='#ffffff' /> : "Generate AI"}
                 </button>
               </div>
               <div className="mb-4 text-left">
-                <label htmlFor="walletAddress" className="block text-gray-700 font-semibold mb-1">Price: $7 / ETH 0.02 / BTC 0.0005</label>
+                <label htmlFor="walletAddress" className="block text-gray-700 font-semibold mb-1">Price: 7 TON Coins</label>
+                {/* <p className="text-red-700 text-sm">The price can only be paid using TON Coin.</p> */}
               </div>
 
+
               <div className="mb-4 text-left">
-                <label htmlFor="telegramUsername" className="block text-gray-700 font-semibold mb-1">Seat:</label>
+                <label htmlFor="telegramUsername" className="block text-gray-700 font-semibold mb-1">Amount of Tickets:</label>
                 <input type="number" id="telegramUsername" value={seat} onChange={(e) => setSeat(e.target.value)} className="block w-full border border-black rounded-md p-2" />
               </div>
               <div className="flex justify-end">
+                
                 <button
                   onClick={payFunction}
                   className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out mr-2"
